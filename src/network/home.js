@@ -1,4 +1,3 @@
-import { hasOwnMetadata } from "core-js/fn/reflect";
 import { request } from './network'
 
 export function getMultiData() {
@@ -7,8 +6,12 @@ export function getMultiData() {
   })
 }
 
-export function getProductData() {
+export function getProductData(type, page) {
   return request({
-    url: '/home/data'
+    url: '/home/data',
+    params: {
+      type,
+      page
+    }
   })
 }

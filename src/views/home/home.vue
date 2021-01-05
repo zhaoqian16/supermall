@@ -1,18 +1,50 @@
 <template>
   <div id="home">
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
+    <div class="main">
+      <Swiper :banner="banner"></Swiper>
+    </div>
   </div>
 </template>
 
 <script>
 import Navbar from 'components/common/navbar/navbar'
+import Swiper from 'components/common/swiper/swiper'
 
 import { getMultiData, getProductData } from 'network/home'
 
 export default {
   name: 'home',
   components: {
-    Navbar
+    Navbar,
+    Swiper
+  },
+  data () {
+    return {
+      banner: [],
+      dKeyword: [],
+      keywords: [],
+      recommend: []
+    }
+  },
+  created() {
+    this.getMultiData()
+    // this.getProductData()
+  },
+  methods: {
+    getMultiData() {
+      getMultiData().then(res => {
+        this.banner = res.data.banner.list
+        this.dKeyword = res.data.dKeyword.list
+        this.keywords = res.data.keywords.list
+        this.recommend = res.data.recommend.list
+      })
+    },
+    getProductData() {
+      getProductData().then(res => {
+        console.log(res)
+      })
+    }
   }
 }
 </script>
@@ -28,5 +60,8 @@ export default {
   top: 0;
   left: 0;
   right: 0;
+}
+.main {
+  padding-top: 44px;
 }
 </style>
