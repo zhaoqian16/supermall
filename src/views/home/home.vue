@@ -2,14 +2,14 @@
   <div id="home">
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
     <div class="main">
-      <Swiper :banner="banner"></Swiper>
+      <HomeSwiper :banner="banner"></HomeSwiper>
     </div>
   </div>
 </template>
 
 <script>
 import Navbar from 'components/common/navbar/navbar'
-import Swiper from 'components/common/swiper/swiper'
+import HomeSwiper from './children/homeSwiper'
 
 import { getMultiData, getProductData } from 'network/home'
 
@@ -17,7 +17,7 @@ export default {
   name: 'home',
   components: {
     Navbar,
-    Swiper
+    HomeSwiper
   },
   data () {
     return {
@@ -64,4 +64,6 @@ export default {
 .main {
   padding-top: 44px;
 }
+
+
 </style>
