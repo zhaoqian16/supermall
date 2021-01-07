@@ -3,13 +3,18 @@
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
     <div class="main">
       <HomeSwiper :banner="banner"></HomeSwiper>
+      <FeatureView :features="recommend"></FeatureView>
+      <TabControl titles="['精选', '流行', '喜欢']"></TabControl>
     </div>
   </div>
 </template>
 
 <script>
 import Navbar from 'components/common/navbar/navbar'
+import TabControl from 'components/contents/tabControl/tabControl'
 import HomeSwiper from './children/homeSwiper'
+import FeatureView from './children/featureView'
+import RecommendView from './children/recommendView'
 
 import { getMultiData, getProductData } from 'network/home'
 
@@ -17,7 +22,10 @@ export default {
   name: 'home',
   components: {
     Navbar,
-    HomeSwiper
+    HomeSwiper,
+    FeatureView,
+    RecommendView,
+    TabControl
   },
   data () {
     return {
@@ -38,6 +46,7 @@ export default {
         this.dKeyword = res.data.dKeyword.list
         this.keywords = res.data.keywords.list
         this.recommend = res.data.recommend.list
+        console.log(res.data)
       })
     },
     getProductData() {
