@@ -1,8 +1,8 @@
 <template>
-  <Swiper :banner="banner" ref="home-swiper">
-    <SwiperItem v-for="(item, index) in banner" :key="index" @mouseover.native="mouseOver" @mouseout.native="mouseOut">
+  <Swiper ref="home-swiper" v-if="banner.length">
+    <SwiperItem v-for="(item, index) in banner" :key="index">
       <a :href="item.link">
-        <img :src="item.image">
+        <img :src="item.image" alt="">
       </a>
     </SwiperItem>
   </Swiper>
@@ -26,12 +26,7 @@ export default {
     }
   },
   methods: {
-    mouseOver (e) {
-      console.log(this.$refs)
-    },
-    mouseOut (e) {
-      
-    }
+
   }
 }
 </script>

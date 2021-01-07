@@ -4,9 +4,11 @@
       <slot></slot>
     </div>
 
+    <slot name="indicator">
+    </slot>
     <div class="indicator">
-      <slot name="indicator" v-if="totalCount > 1">
-        <div v-for="item in totalCount" class="indi-item" :class="{active: currentIndex === item-1}"></div>
+      <slot name="indicator" v-if="showIndicator && slideCount > 1">
+        <div v-for="(item, index) in slideCount" class="indi-item" :class="{active: currentIndex-1 === index}" :key="index"></div>
       </slot>
     </div>
   </div>
@@ -16,65 +18,173 @@
 export default {
   name: 'swiper',
   props: {
-    banner: {
-      type: Array,
-      default () {
-        return []
-      }
+    showIndicator: {
+      type: Boolean,
+      default: true
+    },
+    moveRatio: {
+      type: Number,
+      default: 0.25
+    },
+    animDuration: {
+      type: Number,
+      default: 300
+    },
+    interval: {
+      type: Number,
+      default: 3000
     }
   },
   data() {
     return {
-      currentIndex: 0,
+      currentIndex: 1,
       timer: null,
       startX: '',
       totalWidth: 400,
-      totalCount: 4
+      slideCount: '',
+      siwperStyle: null,
+      scrolling: false
     }
   },
   mounted() {
-    // this.$refs.swiper.style.transform = "translate(-400px, 0)"
-    // this.$refs.swiper.style.-ms-transform = "translate(-400px, 0)"
-    // this.$refs.swiper.style.-webkit-transform = "translate(-400px, 0)"
-    this.startTimer()
+    
+    setTimeout(() => {
+      this.handleDom()
+      this.startTimer()
+    }, 3000)
+    
   },
   methods: {
-    // 实现可向左、向右滑动
-    // 设定计时器，自动播放
-    // 随着播放，改变indicator的cuurentIndex
+    /**
+     * @description: 设置定时器，对图片轮播
+     * @param {*}
+     * @return {*}
+     */
     startTimer() {
       this.timer = window.setInterval(() => {
         this.currentIndex++
-        if (this.currentIndex > this.banner.length - 1) {
-          this.currentIndex = 0
-        } else if (this.currentIndex < 0) {
-          this.currentIndex = this.banner.length - 1
-        }
-        this.$refs.swiper.style.transform = `translate(${-400*this.currentIndex}px, 0)`
-      }, 2000)
+        this.scrollContent(-this.currentIndex * this.totalWidth)
+      }, this.interval)
     },
-    clearTimer() {
+    /**
+     * @description: 停止图片轮播
+     * @param {*}
+     * @return {*}
+     */
+    stopTimer() {
       window.clearInterval(this.timer)
       this.timer = null
     },
+    /**
+     * @description: 滑动开始的触发事件--停止定时器并记录开始滑动的位置
+     * @param {*} e
+     * @return {*}
+     */
     touchStart (e) {
-      this.clearTimer()
+      this.stopTimer()
       this.startX = e.targetTouches[0].pageX
-      
     },
+    /**
+     * @description: 滑动的触发事件--判断滑动距离并swiper移动到对应位置
+     * @param {*} e
+     * @return {*}
+     */
     touchMove(e) {
       // 判断滑动的距离
       this.currentX = e.targetTouches[0].pageX
       this.distance = this.currentX - this.startX
       let currentPosition = - this.currentIndex * this.totalWidth
       let moveDistance = currentPosition + this.distance
-      // 设置页面移动的位置
-      this.$refs.swiper.style.transform = `translate(${moveDistance}px, 0)`
+      // 移动到对应位置
+      this.setTransform(moveDistance)
     },
+    /**
+     * @description: 滑动结束的触发事件--判断滑动距离，确定是否可进入下一页，并滚动到对应位置
+     * @param {*}
+     * @return {*}
+     */
     touchEnd() {
       // 判断滑动的距离
-      // 如果滑动距离超过阈值，滚动至下一页
-      // 如果滑动距离小于阈值，滚动至本页
+      let currentMove = Math.abs(this.distance)
+
+      // 根据滑动距离确定是否进入下一页/上一页，判断最终距离
+      if (this.distance === 0) {
+        return
+      } else if (this.distance > 0 && currentMove > this.totalWidth * this.moveRatio) {
+        this.currentIndex--
+      } else if (this.distance < 0 && currentMove > this.totalWidth * this.moveRatio) {
+        this.currentIndex++
+      }
+
+      // 移动到正确位置
+      this.scrollContent(-this.currentIndex * this.totalWidth)
+      // 开启计时器
+      this.startTimer()
+    },
+    /**
+     * @description: 处理dom元素相关的操作
+     * @param {*}
+     * @return {*}
+     */
+    handleDom() {
+      let swiperEl = document.querySelector('.swiper')
+      let slideEls = swiperEl.getElementsByClassName('slide')
+
+      this.slideCount = slideEls.length
+
+      if (this.slideCount > 1) {
+        let firstClone = slideEls[0].cloneNode(true)
+        let lastClone = slideEls[this.slideCount-1].cloneNode(true)
+        swiperEl.appendChild(firstClone) // 第一张图片复制插入到最后
+        swiperEl.insertBefore(lastClone, slideEls[0]) // 最后一张图片复制插入到开始
+        this.totalWidth = swiperEl.offsetWidth
+        this.siwperStyle = swiperEl.style
+      }
+
+      this.setTransform(-this.totalWidth)
+    },
+    /**
+     * @description: 移动到设定的位置
+     * @param {*} position
+     * @return {*}
+     */
+    setTransform(position) {
+      this.siwperStyle.transform = `translate3d(${position}px, 0, 0)`
+      this.siwperStyle['-webkit-transform'] = `translate3d(${position}px, 0, 0)`
+      this.siwperStyle['-ms-transform'] = `translate3d(${position}px, 0, 0)`
+    },
+    /**
+     * @description: 检验正确的位置
+     * @param {*}
+     * @return {*}
+     */
+    checkPosition() {
+      window.setTimeout(() => {
+        this.siwperStyle.transition = '0ms'
+        // 校验正确的位置
+        if (this.currentIndex > this.slideCount) {
+          this.currentIndex = 1
+        } else if (this.currentIndex < 1) {
+          this.currentIndex = this.slideCount
+        }
+        // 移动设定的位置
+        this.setTransform(-this.currentIndex * this.totalWidth)
+      }, this.animDuration)
+      
+    },
+    /**
+     * @description: 移动至正确的位置
+     * @param {*} currentPosition
+     * @return {*}
+     */
+    scrollContent(currentPosition) {
+      this.scrolling = true
+
+      this.siwperStyle.transition = `transform ${this.animDuration}ms`
+      this.setTransform(currentPosition)
+      this.checkPosition()
+
+      this.scrolling = false
     }
   }
 }
