@@ -1,4 +1,4 @@
-import { request } from './network'
+import { request, requestCharge } from './network'
 
 export function getMultiData() {
   return request({
@@ -7,7 +7,7 @@ export function getMultiData() {
 }
 
 export function getProductData(type, page) {
-  return request({
+  return requestCharge({
     url: '/home/data',
     params: {
       type,

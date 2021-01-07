@@ -25,9 +25,14 @@ export default {
 .feature {
   display: flex;
   justify-content: space-between;
-  margin: 10px 5px;
+  padding: 0 0 20px;
   font-size: 14px;
   color: #666666;
+  margin:  10px 0;
+  border-bottom: 8px solid #eee;
+}
+.feature-item {
+  margin: 0 5px;
 }
 .feature-item img {
   width: 80px;
