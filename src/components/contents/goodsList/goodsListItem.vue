@@ -3,11 +3,8 @@
     <img :src="goodsItem.show.img" alt="">
     <div class="goods-info">
       <div class="title">{{ goodsItem.title }}</div>
-      <div class="content">
-        <span class="price">{{ goodsItem.price }}</span>
-        <span class="collect">{{ goodsItem.cfav }}</span>
-      </div>
-      
+      <span class="price">{{ goodsItem.price }}</span>
+      <span class="collect">{{ goodsItem.cfav }}</span>
       </div>
     </div>
   </div>
@@ -28,7 +25,8 @@ export default {
 <style scoped>
 .goodslist-item {
   position: relative;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
+  font-size: 12px;
 }
 .goodslist-item img {
   width: 100%;
@@ -40,27 +38,29 @@ export default {
   text-align: center;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 5px;
+  padding: 0 5px;
 }
 .goods-info .title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.goods-info .content {
-  position: relative;
+  margin-bottom: 3px;
 }
 .goods-info .price {
   color: var(--color-high-text);
+  margin-right: 15px;
 }
-.goods-info .price::before {
-  content: ' ';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  background: url("~assets/img/common/collect.svg") 0 0/14px 14px;
+.goods-info .collect {
+  position: relative;
+}
+.goods-info .collect::before {
+  content: '';
+    position: absolute;
+    left: -15px;
+    top: 1px;
+    width: 14px;
+    height: 14px;
+    background: url("~assets/img/common/collect.svg") 0 0/14px 14px;
 }
 </style>

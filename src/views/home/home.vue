@@ -1,18 +1,20 @@
 <template>
   <div id="home">
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
-    <div class="main">
+    <Scroll class="content">
       <HomeSwiper :banner="banner"></HomeSwiper>
       <FeatureView :features="recommend"></FeatureView>
       <RecommendView></RecommendView>
       <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick"></TabControl>
       <GoodsList :goodsList="goods[currentType].list"></GoodsList>
-    </div>
+    </Scroll>
   </div>
 </template>
 
 <script>
 import Navbar from 'components/common/navbar/navbar'
+import Scroll from 'components/common/scroll/scroll'
+
 import TabControl from 'components/contents/tabControl/tabControl'
 import GoodsList from 'components/contents/goodsList/goodsList'
 import HomeSwiper from './children/homeSwiper'
@@ -26,6 +28,7 @@ export default {
   name: 'home',
   components: {
     Navbar,
+    Scroll,
     HomeSwiper,
     FeatureView,
     RecommendView,
@@ -49,6 +52,8 @@ export default {
   created() {
     this.getMultiData()
     this.getProductData('pop')
+    this.getProductData('new')
+    this.getProductData('sell')
   },
   methods: {
     getMultiData() {
@@ -84,18 +89,20 @@ export default {
 
 <style scoped>
 #home {
-  position: relative
+  height: 100vh;
 }
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 9;
 }
-.main {
-  padding-top: 44px;
+.content {
+  height: calc(100% - 93px);
+  margin-top: 44px;
 }
 
 
