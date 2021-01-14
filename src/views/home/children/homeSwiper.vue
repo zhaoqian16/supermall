@@ -2,7 +2,7 @@
   <Swiper ref="home-swiper" v-if="banner.length">
     <SwiperItem v-for="(item, index) in banner" :key="index">
       <a :href="item.link">
-        <img :src="item.image" alt="">
+        <img :src="item.image" alt="" @load="loadImage">
       </a>
     </SwiperItem>
   </Swiper>
@@ -26,7 +26,9 @@ export default {
     }
   },
   methods: {
-
+    loadImage() {
+      this.$emit('loadImageForTab')
+    }
   }
 }
 </script>

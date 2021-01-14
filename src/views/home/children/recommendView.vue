@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-view">
-    <img src="~assets/img/home/recommend_bg.jpg" alt="">
+    <img src="~assets/img/home/recommend_bg.jpg" alt="" @load="loadImage">
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
     recommend: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    loadImage() {
+      this.$emit('loadImageForTab')
     }
   }
 }

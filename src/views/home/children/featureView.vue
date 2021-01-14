@@ -35,7 +35,7 @@ export default {
   margin: 0 5px;
 }
 .feature-item img {
-  width: 80px;
+  width: 60px;
   border-radius: 50%;
   padding-bottom: 5px;
 }

@@ -39,6 +39,8 @@ export default {
 .tabcontrol {
   display: flex;
   justify-content: space-between;
+  font-size: 15px;
+  color: #666;
 }
 .tabcontrol-item {
   flex: 1;
