@@ -24,7 +24,6 @@ export default {
 <style scoped>
 .feature {
   display: flex;
-  justify-content: space-between;
   padding: 0 0 20px;
   font-size: 14px;
   color: #666666;
@@ -33,14 +32,15 @@ export default {
 }
 .feature-item {
   margin: 0 5px;
+  flex: 1;
+  text-align: center;
 }
 .feature-item img {
-  width: 60px;
+  width: 80px;
   border-radius: 50%;
   padding-bottom: 5px;
 }
 .feature-item span {
   display: block;
-  text-align: center;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
-    <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl" class="fixed" v-if="isFixed"></TabControl>
+    <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl" class="fixed" v-show="isFixed"></TabControl>
     <Scroll class="home-content" 
             ref="homeScroll" 
             :probType="1"
@@ -70,9 +70,12 @@ export default {
     this.getProductData('sell')
   },
   mounted() {
+    const refresh = this.debounce(this.$refs.homeScroll.refresh)
     this.$bus.$on('loadImage', () => {
-      this.loadImage()
+      // this.loadImage()
+      refresh()
     })
+
   },
   activated() {
     this.$refs.homeScroll && this.$refs.homeScroll.scrollTo(0, this.currentScrollY)
@@ -124,6 +127,16 @@ export default {
     },
     loadImageForTab() {
       this.tabPos = this.$refs.tabControl.$el.offsetTop - this.$refs.homeScroll.$el.offsetTop
+    },
+    // 防抖函数
+    debounce(func, delay) {
+      let timer = null
+      return function (...args) {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+      }
     }
   }
 }

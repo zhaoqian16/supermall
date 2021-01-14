@@ -25,9 +25,18 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      isLoaded: false
+    }
+  },
   methods: {
+    // 该轮播图只获取一次高度
     loadImage() {
-      this.$emit('loadImageForTab')
+      if (!this.isLoaded) {
+        this.$emit('loadImageForTab')
+        this.isLoaded = true
+      }
     }
   }
 }
