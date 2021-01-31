@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <Navbar class="home-nav"><div slot="center">购物街</div></Navbar>
-    <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl" class="fixed" v-show="isFixed"></TabControl>
+    <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="topTab" class="fixed" v-show="isFixed"></TabControl>
     <Scroll class="home-content" 
             ref="homeScroll" 
             :probType="1"
@@ -11,7 +11,7 @@
       <HomeSwiper :banner="banner" @loadImageForTab="loadImageForTab"></HomeSwiper>
       <FeatureView :features="recommend"></FeatureView>
       <RecommendView @loadImageForTab="loadImageForTab"></RecommendView>
-      <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl"></TabControl>
+      <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="currentTab"></TabControl>
       <GoodsList :goodsList="goods[currentType].list"></GoodsList>
     </Scroll>
     <BackTop class="home-back-top" @backTop="backTop" v-if="showBackTop"></BackTop>
@@ -32,6 +32,9 @@ import RecommendView from './children/recommendView'
 
 
 import { getMultiData, getProductData } from 'network/home'
+
+import { debounce } from 'common/utils'
+import { itemListenerMixIn } from 'common/mixin'
 
 export default {
   name: 'home',
@@ -60,9 +63,10 @@ export default {
       showBackTop: false,
       currentScrollY: 0,
       tabPos: '',
-      isFixed: false
+      isFixed: false,
     }
   },
+  mixins: [itemListenerMixIn],
   created() {
     this.getMultiData()
     this.getProductData('pop')
@@ -70,18 +74,13 @@ export default {
     this.getProductData('sell')
   },
   mounted() {
-    const refresh = this.debounce(this.$refs.homeScroll.refresh)
-    this.$bus.$on('loadImage', () => {
-      // this.loadImage()
-      refresh()
-    })
-
   },
   activated() {
     this.$refs.homeScroll && this.$refs.homeScroll.scrollTo(0, this.currentScrollY)
   },
   deactivated() {
     this.currentScrollY = this.$refs.homeScroll.getScrollY()
+    this.$bus.$off('loadImage', this.loadImageListener)
   },
   methods: {
     getMultiData() {
@@ -110,8 +109,10 @@ export default {
           this.currentType = 'sell'
           break
       }
+      this.$refs.topTab.currentIndex = index
+      this.$refs.currentTab.currentIndex = index
     },
-    loadImage() {
+    refresh() {
       this.$refs.homeScroll && this.$refs.homeScroll.refresh()
     },
     loadMore() {
@@ -126,17 +127,7 @@ export default {
       this.isFixed = pos < -this.tabPos ? true : false
     },
     loadImageForTab() {
-      this.tabPos = this.$refs.tabControl.$el.offsetTop - this.$refs.homeScroll.$el.offsetTop
-    },
-    // 防抖函数
-    debounce(func, delay) {
-      let timer = null
-      return function (...args) {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        }, delay)
-      }
+      this.tabPos = this.$refs.currentTab.$el.offsetTop - this.$refs.homeScroll.$el.offsetTop
     }
   }
 }

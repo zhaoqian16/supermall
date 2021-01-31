@@ -50,6 +50,7 @@ export default {
   display: inline-block;
   padding: 5px;
   text-align: center;
+  margin: 5px;
 }
 .active span {
   border-bottom: 2px solid var(--color-high-text);

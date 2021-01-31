@@ -3,7 +3,6 @@
     <div class="swiper" ref="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
       <slot></slot>
     </div>
-
     <slot name="indicator">
     </slot>
     <div class="indicator">
@@ -42,7 +41,7 @@ export default {
       startX: '',
       totalWidth: 400,
       slideCount: '',
-      siwperStyle: null,
+      siwperStyle: {},
       scrolling: false
     }
   },
@@ -73,7 +72,6 @@ export default {
      */
     stopTimer() {
       window.clearInterval(this.timer)
-      this.timer = null
     },
     /**
      * @description: 滑动开始的触发事件--停止定时器并记录开始滑动的位置
@@ -81,6 +79,7 @@ export default {
      * @return {*}
      */
     touchStart (e) {
+      if (this.scrolling) return;
       this.stopTimer()
       this.startX = e.targetTouches[0].pageX
     },
@@ -169,6 +168,7 @@ export default {
         }
         // 移动设定的位置
         this.setTransform(-this.currentIndex * this.totalWidth)
+        this.$emit('transitionEnd', this.currentIndex-1);
       }, this.animDuration)
       
     },
@@ -183,7 +183,7 @@ export default {
       this.siwperStyle.transition = `transform ${this.animDuration}ms`
       this.setTransform(currentPosition)
       this.checkPosition()
-
+      
       this.scrolling = false
     }
   }
