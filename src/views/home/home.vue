@@ -76,7 +76,10 @@ export default {
   mounted() {
   },
   activated() {
+    this.$bus.$on('loadImage', this.loadImageListener)
     this.$refs.homeScroll && this.$refs.homeScroll.scrollTo(0, this.currentScrollY)
+    console.log(this.currentScrollY)
+    this.$refs.homeScroll.refresh()
   },
   deactivated() {
     this.currentScrollY = this.$refs.homeScroll.getScrollY()

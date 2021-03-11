@@ -22,5 +22,7 @@ export default {
   @import 'assets/css/base.css';
   #app {
     position: relative;
+    height: 100%;
+    overflow: hidden;
   }
 </style>

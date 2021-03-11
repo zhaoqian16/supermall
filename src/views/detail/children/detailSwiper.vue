@@ -3,7 +3,7 @@
     <Swiper>
       <SwiperItem v-for="(item, index) in topImages"
                   :key="index">
-        <img :src="item">
+        <img :src="item" @load="imgLoad">
       </SwiperItem>
     </Swiper>
   </div>
@@ -24,6 +24,11 @@ export default {
       default() {
         return []
       }
+    }
+  },
+  methods: {
+    imgLoad() {
+      this.$bus.$
     }
   }
 }

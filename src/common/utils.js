@@ -23,7 +23,7 @@ function padLeftZero (str) {
 };
 
 // 防抖函数
-export function debonce(func, delay) {
+export function debounce(func, delay) {
   let timer = null
   return function(...args) {
     if (timer) clearTimeout(timer)

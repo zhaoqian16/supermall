@@ -22,15 +22,20 @@ export default {
   components: {
     Navbar
   },
+  props: {
+    currentIndex: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      titles: ['商品', '参数', '评论', '推荐'],
-      currentIndex: 0
+      titles: ['商品', '参数', '评论', '推荐']
     }
   },
   methods: {
     titleClick(index) {
-      this.currentIndex = index
+      this.$emit("titleClick", index)
     },
     backClick() {
       this.$router.go(-1)
