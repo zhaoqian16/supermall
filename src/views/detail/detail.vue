@@ -113,14 +113,15 @@ export default {
       // 获取对应主题的顶部高度
       this.themeTopY = []
       this.themeTopY[0] = 0
-      this.themeTopY[1] = this.$refs.params.$el.offsetTop
-      this.themeTopY[2] = this.$refs.comments.$el.offsetTop
-      this.themeTopY[3] = this.$refs.recommend.$el.offsetTop
+      this.themeTopY[1] = this.$refs.params ? this.$refs.params.$el.offsetTop : undefined
+      this.themeTopY[2] = this.$refs.params ? this.$refs.comments.$el.offsetTop :  undefined
+      this.themeTopY[3] = this.$refs.params ? this.$refs.recommend.$el.offsetTop : undefined
       this.themeTopY[4] = Number.POSITIVE_INFINITY
 
       this.$refs.detailScroll && this.$refs.detailScroll.refresh()
     },
     titleClick(index) {
+      console.log(index)
       this.$refs.detailScroll.scrollTo(0, -this.themeTopY[index], 200)
     },
     getScroll(y) {

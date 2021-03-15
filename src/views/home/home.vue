@@ -8,7 +8,9 @@
             :pullUpLoad="true"
             @loadMore="loadMore" 
             @getScroll="getScroll">
-      <HomeSwiper :banner="banner" @loadImageForTab="loadImageForTab"></HomeSwiper>
+      <HomeSwiper :banner="banner" 
+                  @loadImageForTab="loadImageForTab"
+                  ref="swiper"></HomeSwiper>
       <FeatureView :features="recommend"></FeatureView>
       <RecommendView @loadImageForTab="loadImageForTab"></RecommendView>
       <TabControl :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="currentTab"></TabControl>
@@ -77,13 +79,14 @@ export default {
   },
   activated() {
     this.$bus.$on('loadImage', this.loadImageListener)
-    this.$refs.homeScroll && this.$refs.homeScroll.scrollTo(0, this.currentScrollY)
-    console.log(this.currentScrollY)
-    this.$refs.homeScroll.refresh()
+    this.$refs.homeScroll.scrollTo(0, -300, 0)
+    // this.$refs.homeScroll.refresh()
   },
   deactivated() {
     this.currentScrollY = this.$refs.homeScroll.getScrollY()
     this.$bus.$off('loadImage', this.loadImageListener)
+    console.dir(this.$refs.swiper)
+    this.$refs.swiper.stopTimer()
   },
   methods: {
     getMultiData() {

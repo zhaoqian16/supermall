@@ -48,8 +48,8 @@ export default {
     getScrollY() {
       return this.scroll && this.scroll.y
     },
-    scrollTo(x, y, time) {
-      this.scroll && this.scroll.scrollTo(x, y, time)
+    scrollTo(x, y, time=100) {
+      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
       this.scroll && this.scroll.finishPullUp()
