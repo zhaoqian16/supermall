@@ -25,6 +25,7 @@ import { debounce } from 'common/utils'
 import { itemListenerMixIn } from 'common/mixin'
 
 import Scroll from 'components/common/scroll/scroll'
+// import Toast from 'components/common/toast/toast.vue'
 
 import BackTop from 'components/contents/backTop/backTop'
 
@@ -67,7 +68,9 @@ export default {
       recommend: [],
       themeTopY: [],
       currentIndex: 0,
-      showBackTop: false
+      showBackTop: false,
+      message: "",
+      isShow: false
     }
   },
   created() {
@@ -121,7 +124,6 @@ export default {
       this.$refs.detailScroll && this.$refs.detailScroll.refresh()
     },
     titleClick(index) {
-      console.log(index)
       this.$refs.detailScroll.scrollTo(0, -this.themeTopY[index], 200)
     },
     getScroll(y) {
@@ -155,9 +157,13 @@ export default {
         desc: this.goods.desc,
         price: this.goods.nowPrice
       }
-      this.add(product)
+      this.add(product).then(res => {
+        // 方式一：封装前
+        // this.$refs.toast.show(res, 3000)
+        // 方式二：封装后
+        this.$toast.show(res, 3000)
+      })
     }
-
   }
 }
 </script>

@@ -70,26 +70,27 @@ export default {
   },
   mixins: [itemListenerMixIn],
   created() {
-    this.getMultiData()
-    this.getProductData('pop')
-    this.getProductData('new')
-    this.getProductData('sell')
+    this._getMultiData()
+    this._getProductData('pop')
+    this._getProductData('new')
+    this._getProductData('sell')
   },
   mounted() {
   },
   activated() {
     this.$bus.$on('loadImage', this.loadImageListener)
-    this.$refs.homeScroll.scrollTo(0, -300, 0)
-    // this.$refs.homeScroll.refresh()
+    this.$refs.homeScroll.scrollTo(0, this.currentScrollY, 0)
+    this.$refs.homeScroll.refresh()
+    console.log("进入："+this.currentScrollY)
   },
   deactivated() {
-    this.currentScrollY = this.$refs.homeScroll.getScrollY()
+    this.currentScrollY = this.$refs.homeScroll.scrollY
     this.$bus.$off('loadImage', this.loadImageListener)
-    console.dir(this.$refs.swiper)
     this.$refs.swiper.stopTimer()
+    console.log("离开："+this.currentScrollY)
   },
   methods: {
-    getMultiData() {
+    _getMultiData() {
       getMultiData().then(res => {
         this.banner = res.data.banner.list
         this.dKeyword = res.data.dKeyword.list
@@ -97,7 +98,7 @@ export default {
         this.recommend = res.data.recommend.list
       })
     },
-    getProductData(type) {
+    _getProductData(type) {
       this.goods[type].page++
       getProductData(type, this.goods[type].page).then(res => {
         this.goods[type].list.push(...res.data.list)
@@ -122,7 +123,7 @@ export default {
       this.$refs.homeScroll && this.$refs.homeScroll.refresh()
     },
     loadMore() {
-      this.getProductData(this.currentType)
+      this._getProductData(this.currentType)
       this.$refs.homeScroll && this.$refs.homeScroll.finishPullUp()
     },
     backTop() {

@@ -44,7 +44,7 @@ export function requestCharge(options) {
       .then(res => {
         resolve(res)
       }).catch(err => {
-        reject(error)
+        reject(err)
       })
   })
 }

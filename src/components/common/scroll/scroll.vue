@@ -26,6 +26,11 @@ export default {
       default: false
     }
   },
+  computed: {
+    scrollY() {
+      return this.scroll && this.scroll.y
+    }
+  },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {
       click: true,
@@ -44,9 +49,6 @@ export default {
   methods: {
     refresh() {
       this.scroll && this.scroll.refresh()
-    },
-    getScrollY() {
-      return this.scroll && this.scroll.y
     },
     scrollTo(x, y, time=100) {
       this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
